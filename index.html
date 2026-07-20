@@ -5,10 +5,32 @@
     <link rel="icon" type="image/svg+xml" href="/chat2-build/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Анонимные чаты</title>
-    <script type="module" crossorigin src="/chat2-build/assets/index-BJxuTqDY.js"></script>
+    <script type="module" crossorigin src="/chat2-build/assets/index-C-u1ejlX.js"></script>
     <link rel="stylesheet" crossorigin href="/chat2-build/assets/index-D3gzm8LK.css">
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Hidden partner-link attribution: VK reliably forwards a custom
+      // parameter through the URL FRAGMENT (#ref_id=...) but not always
+      // through the query string. Our own app router also uses the hash
+      // (#/some/path) and rewrites it almost immediately on init, so this
+      // has to run — and capture it — before any module/router code does.
+      // A plain (non-module) inline script runs synchronously during HTML
+      // parsing, well before the deferred module script below.
+      (function () {
+        try {
+          var params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+          var refId = params.get("ref_id");
+          if (refId) {
+            localStorage.setItem("anon-chat-rooms:ref-code", refId);
+            // Our app's own router treats everything after # as a route
+            // path — clear this custom fragment now, before it mounts, so
+            // it isn't mistaken for one (which would show a "not found").
+            history.replaceState(null, "", window.location.pathname + window.location.search);
+          }
+        } catch (e) {}
+      })();
+    </script>
   </body>
 </html>
